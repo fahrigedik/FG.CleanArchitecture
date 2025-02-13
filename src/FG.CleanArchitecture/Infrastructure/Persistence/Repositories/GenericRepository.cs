@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.Linq.Expressions;
+using Domain.Common;
 using Domain.Repositories;
 using Infrastructure.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 {
     private readonly AppDbContext _dbContext;
     private DbSet<T> _dbSet;
+
     public GenericRepository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
         _dbSet = _dbContext.Set<T>();
     }
+
     public async Task<T> GetByIdAsync(Guid id)
     {
         var entity = await _dbSet.FindAsync(id);
@@ -24,6 +27,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
         return entity;
     }
+
     public async Task<List<T>> ListAllAsync()
     {
         var entities = await _dbSet.ToListAsync();
@@ -34,6 +38,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         var entities = await _dbSet.AsNoTracking().ToListAsync();
         return entities;
+    }
+
+    public async Task<List<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
+    {
+        return await _dbSet.Where(expression).ToListAsync();
     }
 
     public async Task<T> AddAsync(T entity)
@@ -49,9 +58,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         await _dbContext.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(T entity)
+    public async Task DeleteAsync(T entity)
     {
         _dbSet.Remove(entity);
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
+
+
 }
