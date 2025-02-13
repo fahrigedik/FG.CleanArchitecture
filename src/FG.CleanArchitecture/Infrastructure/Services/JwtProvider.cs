@@ -8,11 +8,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using Domain.Services;
+using Infrastructure.Options;
 
 namespace Infrastructure.Services;
 public class JwtProvider(
     UserManager<AppUser> userManager,
-    IOptions<JwtBearerOptions> jwtBearerOptions)
+    IOptions<JwtOptions> jwtOptions)
     : IJwtProvider
 {
     public async Task<TokenResponse> CreateToken(AppUser appUser)
@@ -25,33 +26,27 @@ public class JwtProvider(
             new Claim("UserName", appUser.UserName ?? "")
         };
 
-        var roles = await userManager.GetRolesAsync(appUser);
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
+        DateTime expires = DateTime.UtcNow.AddMonths(1);
 
-        var signingKey = jwtBearerOptions.Value.TokenValidationParameters.IssuerSigningKey;
-        var expiration = DateTime.UtcNow.AddHours(1);
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
 
-        JwtSecurityToken securityToken = new(
-            issuer: jwtBearerOptions.Value.TokenValidationParameters.ValidIssuer,
-            audience: jwtBearerOptions.Value.TokenValidationParameters.ValidAudience,
+        JwtSecurityToken jwtSecurityToken = new(
+            issuer: jwtOptions.Value.Issuer,
+            audience: jwtOptions.Value.Audience,
             claims: claims,
-            expires: expiration,
             notBefore: DateTime.UtcNow,
-            signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
-        );
+            expires: expires,
+            signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
 
-        string token = new JwtSecurityTokenHandler().WriteToken(securityToken);
+        JwtSecurityTokenHandler handler = new();
 
-        return new TokenResponse
+        string token = handler.WriteToken(jwtSecurityToken);
+
+
+        return new TokenResponse()
         {
+            Expiration = expires,
             Token = token,
-            Expiration = expiration,
-            RefreshToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray()),
-            RefreshTokenExpiration = DateTime.UtcNow.AddDays(7).ToString()
         };
-
     }
 }
