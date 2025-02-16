@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.ConstrainedExecution;
 
 namespace Infrastructure;
 public static class DependencyInjection
@@ -47,24 +46,18 @@ public static class DependencyInjection
         }).AddJwtBearer();
 
 
-
-
+        /*
+         * Register Repository and Services
+         */
         services.AddScoped<IJwtProvider, JwtProvider>();
 
-        // Register Repositories
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IBookRepository, BookRepository>();
 
-        // Register UnitOfWork
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-
-
 
         return services;
     }
-
-    //Add UnitOfWork
 
 
 
