@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Domain.Common;
-using Domain.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -9,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Domain.Services;
 using Infrastructure.Options;
+using Domain.Entities.Identity;
 
 namespace Infrastructure.Services;
 public class JwtProvider(

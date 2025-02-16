@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Domain.Identity;
+namespace Domain.Entities.Identity;
 public class AppUser : IdentityUser<Guid>
 {
     public string FirstName { get; set; } = string.Empty;

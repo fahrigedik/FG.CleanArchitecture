@@ -8,7 +8,7 @@ namespace WebAPI.Controllers
     public class BaseApiController : ControllerBase
     {
         public readonly IMediator _mediator;
-        protected BaseApiController(IMediator mediator)
+        public BaseApiController(IMediator mediator)
         {
             _mediator = mediator;
         }

@@ -1,5 +1,5 @@
 ﻿using Domain.Common;
-using Domain.Identity;
+using Domain.Entities.Identity;
 
 namespace Domain.Services;
 public interface IJwtProvider

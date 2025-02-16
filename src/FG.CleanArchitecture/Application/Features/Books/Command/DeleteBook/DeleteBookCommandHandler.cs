@@ -1,4 +1,5 @@
 ﻿using Domain.Repositories;
+using Domain.UnitOfWork;
 using MediatR;
 
 namespace Application.Features.Books.Command.DeleteBook;
@@ -6,9 +7,11 @@ namespace Application.Features.Books.Command.DeleteBook;
 internal sealed class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, string>
 {
     private readonly IBookRepository _bookRepository;
-    public DeleteBookCommandHandler(IBookRepository bookRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public DeleteBookCommandHandler(IBookRepository bookRepository, IUnitOfWork unitOfWork)
     {
         _bookRepository = bookRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<string> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
@@ -19,6 +22,8 @@ internal sealed class DeleteBookCommandHandler : IRequestHandler<DeleteBookComma
             return "Book not found.";
         }
         await _bookRepository.DeleteAsync(book);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
         return "Book deleted successfully.";
     }
 }

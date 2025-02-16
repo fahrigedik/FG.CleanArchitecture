@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Domain.Repositories;
 using Domain.Services;
+using Domain.UnitOfWork;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Services;
 
 namespace Infrastructure;
@@ -20,6 +22,9 @@ public class InfrastructureModule : Module
             .InstancePerLifetimeScope();
         builder.RegisterType<BookRepository>().As<IBookRepository>().InstancePerLifetimeScope();
 
+        builder.RegisterType<UnitOfWork>()
+            .As<IUnitOfWork>()
+            .InstancePerLifetimeScope();
 
 
         base.Load(builder);

@@ -1,8 +1,21 @@
+using Application;
+using Autofac.Extensions.DependencyInjection;
+using Infrastructure;
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+builder.Services.AddOpenApi();
 
 builder.Services.AddCors();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration, containerBuilder =>
+{
+
+});
 
 
 builder.Services.AddControllers();
@@ -15,13 +28,23 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("_scalar");
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .AllowAnyMethod()
+    .SetIsOriginAllowed(t => true));
+
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 

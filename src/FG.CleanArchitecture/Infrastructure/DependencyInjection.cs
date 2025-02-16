@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Domain.Identity;
+using Domain.Entities.Identity;
 using Infrastructure.Options;
 using Infrastructure.Persistence.DbContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,7 +32,7 @@ public static class DependencyInjection
         })
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
-        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
         services.ConfigureOptions<JwtTokenOptionsSetup>();
 
         services.AddAuthentication(options =>
