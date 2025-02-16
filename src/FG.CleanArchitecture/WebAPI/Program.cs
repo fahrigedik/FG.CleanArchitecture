@@ -1,21 +1,17 @@
 using Application;
-using Autofac.Extensions.DependencyInjection;
 using Infrastructure;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+// Add services to the container
 
 builder.Services.AddOpenApi();
 
 builder.Services.AddCors();
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration, containerBuilder =>
-{
+builder.Services.AddInfrastructure(builder.Configuration);
 
-});
 
 
 builder.Services.AddControllers();

@@ -1,7 +1,12 @@
-﻿using Autofac;
-using Domain.Entities.Identity;
+﻿using Domain.Entities.Identity;
+using Domain.Repositories;
+using Domain.Services;
+using Domain.UnitOfWork;
 using Infrastructure.Options;
 using Infrastructure.Persistence.DbContext;
+using Infrastructure.Persistence.Repositories;
+using Infrastructure.Persistence.UnitOfWork;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +17,7 @@ using System.Runtime.ConstrainedExecution;
 namespace Infrastructure;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, Action<ContainerBuilder> containerBuilder = null)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
         {
@@ -42,9 +47,19 @@ public static class DependencyInjection
         }).AddJwtBearer();
 
 
-        var builder = new ContainerBuilder();
-        builder.RegisterModule<InfrastructureModule>();
-        containerBuilder?.Invoke(builder);
+
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
+
+        // Register Repositories
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IBookRepository, BookRepository>();
+
+        // Register UnitOfWork
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+
 
         return services;
     }
