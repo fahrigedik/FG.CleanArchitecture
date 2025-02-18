@@ -11,19 +11,25 @@
     "type": "project"
   },
   "symbols": {
-      "ProjectName": {
-          "type": "parameter",
-          "description": "Fahri Gedik Clean Architecture Template",
-            "replaces": "FG.CleanArchitecture",
-          "defaultValue": "MyNewProject"
-      },
+    "ProjectName": {
+      "type": "parameter",
+      "description": "Fahri Gedik Clean Architecture Template",
+      "replaces": "FG.CleanArchitecture",
+      "defaultValue": "MyNewProject"
+    },
     "Framework": {
       "type": "parameter",
       "description": "Target framework version",
       "datatype": "choice",
       "choices": [
-        { "choice": "net9.0", "description": "Hedef .NET 9.0" },
-        { "choice": "net8.0", "description": "Hedef .NET 8.0" }
+        {
+          "choice": "net9.0",
+          "description": "Target .NET 9.0"
+        },
+        {
+          "choice": "net8.0",
+          "description": "Target .NET 8.0"
+        }
       ],
       "defaultValue": "net9.0"
     }
@@ -46,19 +52,20 @@
     }
   ],
   "primaryOutputs": [
-    { "path": "src/FG.CleanArchitecture/Domain/Domain.csproj" },  
-    { "path": "src/FG.CleanArchitecture/Application/Application.csproj" },
-    { "path": "src/FG.CleanArchitecture/Infrastructure/Infrastructure.csproj" },
-    { "path": "src/FG.CleanArchitecture/WebAPI/WebAPI.csproj" }
+    { "path": "src/Domain/Domain.csproj" },
+    { "path": "src/Application/Application.csproj" },
+    { "path": "src/Infrastructure/Infrastructure.csproj" },
+    { "path": "src/WebAPI/WebAPI.csproj" }
   ],
   "postActions": [
-        {
-            "description": "Rename folders to match the new project name.",
-            "manualInstructions": [
-                { "text": "Rename folders: Domain -> [ProjectName].Domain, Application -> [ProjectName].Application, Infrastructure -> [ProjectName].Infrastructure, WebAPI -> [ProjectName].WebAPI" }
-            ],
-            "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025", 
-            "continueOnError": false
-        }
-    ]
+    {
+      "description": "Rename folders to match the new project name.",
+      "manualInstructions": [
+        { "text": "Rename folders: Domain -> [ProjectName].Domain, Application -> [ProjectName].Application, Infrastructure -> [ProjectName].Infrastructure, WebAPI -> [ProjectName].WebAPI" }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": false
+    }
+  ],
+  "icon": "icon.png"
 }

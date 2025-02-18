@@ -2,13 +2,12 @@
 
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<PackageVersion>9.0.0</PackageVersion>
+		<PackageVersion>9.0.4</PackageVersion>
 		<PackageId>FG.CleanArchitecture</PackageId>
 		<Title>Clean Architecture Web API Template</Title>
 		<Authors>Fahri Gedik</Authors>
 		<Description>Clean Architecture solution template for creating Web API</Description>
 		<PackageTags>cleanarchitecture;webapi;template;EFCore;SQL;Scalar</PackageTags>
-
 		<TargetFramework>net9.0</TargetFramework>
 		<IncludeContentInPack>true</IncludeContentInPack>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
@@ -16,12 +15,16 @@
 		<NoDefaultExcludes>true</NoDefaultExcludes>
 		<EnableDefaultItems>false</EnableDefaultItems>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="**\*" Exclude="**\bin\**;**\obj\**;**\.git\**;**\.vs\**;**\*.user;**\*.suo">
-			<PackagePath>content</PackagePath>
-		</Content>
+		<Content Include="**\*" Exclude="**\bin\**;**\obj\**;**\.git\**;**\.vs\**;**\*.user;**\*.suo" />
+		<None Include=".template.config/icon.png" Pack="true" PackagePath="icon.png" />
+		<None Include="LICENSE" Pack="true" PackagePath="\" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
 		<Compile Remove="**\*" />
 	</ItemGroup>
 
